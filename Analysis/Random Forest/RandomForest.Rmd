@@ -1,0 +1,45 @@
+---
+title: "RandomForest"
+output: html_document
+---
+
+```{r}
+library(readxl)
+library(caret)
+library(randomForest)
+
+df <- read_excel("satisfaction.xlsx")
+df$satisfaction_v2 <- as.factor(df$satisfaction_v2)
+
+colnames(df) <- gsub("\\s+", "", colnames(df))
+names(df)[names(df) == "Departure/Arrivaltimeconvenient"] <- "Departure_ArrivalTimeConvenient"
+names(df)[names(df) == "On-boardservice"] <- "On_boardservice"
+
+#Impute missing values:
+numeric_cols <- sapply(df, is.numeric)
+factor_cols <- sapply(df, is.factor)
+for (col in names(df)[numeric_cols]) {
+  df[is.na(df[[col]]), col] <- mean(df[[col]], na.rm = TRUE)
+}
+for (col in names(df)[factor_cols]) {
+  mode_val <- names(which.max(table(df[[col]], useNA = "ifany")))
+  df[is.na(df[[col]]), col] <- mode_val
+}
+
+
+set.seed(4)
+index <- createDataPartition(df$satisfaction_v2, p = 0.8, list = FALSE)
+train_data <- df[index, ]
+test_data <- df[-index, ]
+```
+
+```{r}
+model_rf <- randomForest(satisfaction_v2 ~ ., data = train_data)
+model_rf
+```
+
+```{r}
+predictions_rf <- predict(model_rf, newdata = test_data)
+predictions_rf
+```
+
