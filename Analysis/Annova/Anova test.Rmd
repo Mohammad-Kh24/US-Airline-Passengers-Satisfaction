@@ -1,0 +1,263 @@
+---
+title: "Anova test"
+output: html_document
+---
+
+```{r}
+library(readxl)
+```
+
+```{r}
+data <- read_excel("satisfaction.xlsx")
+```
+
+```{r}
+data$satisfaction_numeric <- ifelse(data$satisfaction_v2 == "satisfied", 1, 0)
+```
+
+```{r}
+n_iterations <- 200
+sample_size <- 5000
+```
+
+```{r}
+# Numerical:
+bootstrap_anova <- function(column_name) {
+
+  
+  column_data <- data[[column_name]]
+  
+  
+  bootstrap_samples <- replicate(n_iterations, {
+    sample_indices <- sample(seq_along(column_data), sample_size, replace = TRUE)  
+    list(values = column_data[sample_indices], satisfaction = data$satisfaction_numeric[sample_indices])
+  }, simplify = FALSE)
+  
+  anova_p_values <- sapply(bootstrap_samples, function(sample_data) {
+    temp_df <- data.frame(satisfaction = sample_data$satisfaction, value = sample_data$values)
+    model <- aov(value ~ satisfaction, data = temp_df)
+    summary(model)[[1]]$`Pr(>F)`[1] 
+  })
+  
+  return(anova_p_values)
+}
+```
+
+```{r}
+# categorical:
+bootstrap_anova_categorical <- function(column_name) {
+
+  data[[column_name]] <- as.factor(data[[column_name]])
+  
+  bootstrap_samples <- replicate(n_iterations, {
+    sample_indices <- sample(seq_along(data[[column_name]]), sample_size, replace = TRUE)
+    list(factor_values = data[[column_name]][sample_indices], 
+         satisfaction = data$satisfaction_numeric[sample_indices])
+  }, simplify = FALSE)
+  
+ 
+  anova_p_values <- sapply(bootstrap_samples, function(sample_data) {
+    temp_df <- data.frame(
+      satisfaction = sample_data$satisfaction, 
+      factor_column = sample_data$factor_values
+    )
+    model <- aov(satisfaction ~ factor_column, data = temp_df)
+    summary(model)[[1]]$`Pr(>F)`[1]  
+  })
+  
+  return(anova_p_values)
+}
+```
+
+```{r}
+#Gender:
+result_gender <- bootstrap_anova_categorical("Gender") 
+summary(result_gender)
+significant_count <- sum(result_gender < 0.05)
+significant_percentage <- (significant_count / length(result_gender)) * 100
+significant_percentage
+```
+
+```{r}
+#Class:
+result_class <- bootstrap_anova_categorical("Class")   
+summary(result_class)
+significant_count <- sum(result_class < 0.05)
+significant_percentage <- (significant_count / length(result_class)) * 100
+significant_percentage
+```
+
+```{r}
+#Customer type:
+result_Customer_type <- bootstrap_anova_categorical("Customer Type")   
+summary(result_Customer_type)
+significant_count <- sum(result_Customer_type < 0.05)
+significant_percentage <- (significant_count / length(result_Customer_type)) * 100
+significant_percentage
+```
+
+```{r}
+#Type of travel:
+result_type_of_travel <- bootstrap_anova_categorical("Type of Travel")   
+summary(result_type_of_travel)
+significant_count <- sum(result_type_of_travel < 0.05)
+significant_percentage <- (significant_count / length(result_type_of_travel)) * 100
+significant_percentage
+```
+
+```{r}
+#Age:
+result_a <- bootstrap_anova("Age") 
+significant_count <- sum(result_a < 0.05)
+significant_percentage <- (significant_count / length(result_a)) * 100
+significant_percentage
+summary(result_a)
+```
+
+```{r}
+#Flight distance:
+result_fd <- bootstrap_anova("Flight Distance") 
+significant_count <- sum(result_fd < 0.05)
+significant_percentage <- (significant_count / length(result_fd)) * 100
+significant_percentage
+summary(result_fd)
+```
+
+```{r}
+#Departure/Arrival time convenient:
+result_datc <- bootstrap_anova("Departure/Arrival time convenient") 
+significant_count <- sum(result_datc < 0.05)
+significant_percentage <- (significant_count / length(result_datc)) * 100
+significant_percentage
+summary(result_datc)
+```
+
+```{r}
+#Seat comfort:
+result_sc <- bootstrap_anova("Seat comfort") 
+significant_count <- sum(result_sc < 0.05)
+significant_percentage <- (significant_count / length(result_sc)) * 100
+significant_percentage
+summary(result_sc)
+```
+
+```{r}
+#Cleanliness:
+result_c <- bootstrap_anova("Cleanliness") 
+significant_count <- sum(result_c < 0.05)
+significant_percentage <- (significant_count / length(result_c)) * 100
+significant_percentage
+summary(result_c)
+```
+
+```{r}
+#Check-in service:
+result_cs <- bootstrap_anova("Checkin service") 
+significant_count <- sum(result_cs < 0.05)
+significant_percentage <- (significant_count / length(result_cs)) * 100
+significant_percentage
+summary(result_cs)
+```
+
+```{r}
+#Gate location:
+result_gl <- bootstrap_anova("Gate location") 
+significant_count <- sum(result_gl < 0.05)
+significant_percentage <- (significant_count / length(result_gl)) * 100
+significant_percentage
+summary(result_gl)
+```
+
+```{r}
+#Online support:
+result_os <- bootstrap_anova("Online support") 
+significant_count <- sum(result_os < 0.05)
+significant_percentage <- (significant_count / length(result_os)) * 100
+significant_percentage
+summary(result_os)
+```
+
+```{r}
+#Ease of online booking:
+result_eoob <- bootstrap_anova("Ease of Online booking") 
+significant_count <- sum(result_eoob < 0.05)
+significant_percentage <- (significant_count / length(result_eoob)) * 100
+significant_percentage
+summary(result_eoob)
+```
+
+```{r}
+#On-board service:
+result_obs <- bootstrap_anova("On-board service") 
+significant_count <- sum(result_obs < 0.05)
+significant_percentage <- (significant_count / length(result_obs)) * 100
+significant_percentage
+summary(result_obs)
+```
+
+```{r}
+#Leg room service:
+result_lrs <- bootstrap_anova("Leg room service") 
+significant_count <- sum(result_lrs < 0.05)
+significant_percentage <- (significant_count / length(result_lrs)) * 100
+significant_percentage
+summary(result_lrs)
+```
+
+```{r}
+#Baggage handling:
+result_bh <- bootstrap_anova("Baggage handling") 
+significant_count <- sum(result_bh < 0.05)
+significant_percentage <- (significant_count / length(result_bh)) * 100
+significant_percentage
+summary(result_bh)
+```
+
+```{r}
+#Online boarding:
+result_ob <- bootstrap_anova("Online boarding") 
+significant_count <- sum(result_ob < 0.05)
+significant_percentage <- (significant_count / length(result_ob)) * 100
+significant_percentage
+summary(result_ob)
+```
+
+```{r}
+#Departure delay in minutes:
+result_ddim <- bootstrap_anova("Departure Delay in Minutes") 
+significant_count <- sum(result_ddim < 0.05)
+significant_percentage <- (significant_count / length(result_ddim)) * 100
+significant_percentage
+summary(result_ddim)
+```
+
+```{r}
+#Arrival delay in minutes:
+result_adim <- bootstrap_anova("Arrival Delay in Minutes") 
+significant_count <- sum(result_adim < 0.05)
+significant_percentage <- (significant_count / length(result_adim)) * 100
+significant_percentage
+summary(result_adim)
+```
+
+```{r}
+data$satisfaction_numeric <- ifelse(data$satisfaction_v2 == "satisfied", 1, 0)
+```
+
+```{r}
+#effects on satisfaction:
+total <- lm(satisfaction_numeric ~ `Arrival Delay in Minutes`+`Departure Delay in Minutes`+`Online boarding`+`Baggage handling`+`Leg room service`+`On-board service`+`Ease of Online booking`+`Online support`+`Inflight wifi service`+`Gate location`+`Food and drink`+`Checkin service`+Cleanliness+`Seat comfort`+`Inflight entertainment`+`Departure/Arrival time convenient`+`Flight Distance`+Age+`Customer Type` + Gender + `Type of Travel` + Class  , data=data)
+```
+
+```{r}
+cbind(total$coefficients)
+```
+
+```{r}
+confint(total, level=0.95)
+```
+
+```{r}
+anova(total)
+```
+
