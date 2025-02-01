@@ -1,0 +1,286 @@
+---
+title: "Shapiro-Wilk test"
+output: html_document
+---
+
+```{r}
+library(readxl)
+
+df <- read_excel("satisfaction.xlsx")
+head(df)
+```
+
+```{r}
+#Age:
+age_data <- df$Age
+num_bootstrap <- 100
+
+shapiro_test <- function(data) {
+  shapiro.test(data)$p.value
+}
+
+p_values <- replicate(num_bootstrap, {
+  sample_data <- sample(age_data, 5000, replace = TRUE)
+  shapiro_test(sample_data)
+})
+
+
+hist(age_data, breaks = 30, main = "Histogram of Age Data", xlab = "Age", col = "red")
+qqnorm(age_data); qqline(age_data, col = "red")
+
+age_proportion_pvalues <- mean(p_values <= 0.05)
+paste("Proportion of p-values:", age_proportion_pvalues)
+```
+
+```{r}
+#Flight distance:
+flightDistance_data <- df$`Flight Distance`
+num_bootstrap <- 100
+
+p_values <- replicate(num_bootstrap, {
+  sample_data <- sample(flightDistance_data, 5000, replace = TRUE)
+  shapiro_test(sample_data)
+})
+
+
+hist(flightDistance_data, breaks = 30, main = "Histogram of Flight Distance data", xlab = "Flight Distance", col = "brown")
+qqnorm(flightDistance_data); qqline(flightDistance_data, col = "brown")
+
+flightDistance_proportion_pvalues <- mean(p_values <= 0.05)
+paste("Proportion of p-values:", flightDistance_proportion_pvalues)
+```
+
+```{r}
+#Seat comfort:
+seatComfort_data <- df$`Seat comfort`
+num_bootstrap <- 100
+
+p_values <- replicate(num_bootstrap, {
+  sample_data <- sample(seatComfort_data, 5000, replace = TRUE)
+  shapiro_test(sample_data)
+})
+
+
+hist(seatComfort_data, breaks = 30, main = "Histogram of Seat Comfort data", xlab = "Seat Comfort", col = "lightblue")
+qqnorm(seatComfort_data); qqline(seatComfort_data, col = "lightblue")
+
+seatComfort_proportion_pvalues <- mean(p_values <= 0.05)
+paste("Proportion of p-values:", seatComfort_proportion_pvalues)
+```
+
+```{r}
+#Departure/Arrival time convenient:
+DAtimeConvenient_data <- df$`Departure/Arrival time convenient`
+num_bootstrap <- 100
+
+p_values <- replicate(num_bootstrap, {
+  sample_data <- sample(DAtimeConvenient_data, 5000, replace = TRUE)
+  shapiro_test(sample_data)
+})
+
+
+hist(DAtimeConvenient_data, breaks = 30, main = "Histogram of Departure/Arrival time convenient data", xlab = "Departure/Arrival time convenient", col = "orange")
+qqnorm(DAtimeConvenient_data); qqline(DAtimeConvenient_data, col = "orange")
+
+DAtimeConvenient_proportion_pvalues <- mean(p_values <= 0.05)
+paste("Proportion of p-values:", DAtimeConvenient_proportion_pvalues)
+```
+
+```{r}
+#Gate location:
+gateLocation_data <- df$`Gate location`
+num_bootstrap <- 100
+
+p_values <- replicate(num_bootstrap, {
+  sample_data <- sample(gateLocation_data, 5000, replace = TRUE)
+  shapiro_test(sample_data)
+})
+
+
+hist(gateLocation_data, breaks = 30, main = "Histogram of Gate location data", xlab = "Gate location", col = "gray")
+qqnorm(gateLocation_data); qqline(gateLocation_data, col = "gray")
+
+gateLocation_proportion_pvalues <- mean(p_values <= 0.05)
+paste("Proportion of p-values:", gateLocation_proportion_pvalues)
+```
+
+```{r}
+#Online support:
+onlineSupport_data <- df$`Online support`
+num_bootstrap <- 100
+
+p_values <- replicate(num_bootstrap, {
+  sample_data <- sample(onlineSupport_data, 5000, replace = TRUE)
+  shapiro_test(sample_data)
+})
+
+
+hist(onlineSupport_data, breaks = 30, main = "Histogram of Online support data", xlab = "Online support", col = "lightgreen")
+qqnorm(onlineSupport_data); qqline(onlineSupport_data, col = "lightgreen")
+
+onlineSupport_proportion_pvalues <- mean(p_values <= 0.05)
+paste("Proportion of p-values:", onlineSupport_proportion_pvalues)
+```
+
+```{r}
+#Ease of online booking:
+easeOfOnlineBooking_data <- df$`Ease of Online booking`
+num_bootstrap <- 100
+
+p_values <- replicate(num_bootstrap, {
+  sample_data <- sample(easeOfOnlineBooking_data, 5000, replace = TRUE)
+  shapiro_test(sample_data)
+})
+
+
+hist(easeOfOnlineBooking_data, breaks = 30, main = "Histogram of Ease of online booking data", xlab = "Ease of online booking", col = "darkgreen")
+qqnorm(easeOfOnlineBooking_data); qqline(easeOfOnlineBooking_data, col = "darkgreen")
+
+easeOfOnlineBooking_proportion_pvalues <- mean(p_values <= 0.05)
+paste("Proportion of p-values:", easeOfOnlineBooking_proportion_pvalues)
+```
+
+```{r}
+#On-board service:
+onboardService_data <- df$`On-board service`
+num_bootstrap <- 100
+
+p_values <- replicate(num_bootstrap, {
+  sample_data <- sample(onboardService_data, 5000, replace = TRUE)
+  shapiro_test(sample_data)
+})
+
+
+hist(onboardService_data, breaks = 30, main = "Histogram of On-board service data", xlab = "On-board service", col = "pink")
+qqnorm(onboardService_data); qqline(onboardService_data, col = "pink")
+
+onboardService_proportion_pvalues <- mean(p_values <= 0.05)
+paste("Proportion of p-values:", onboardService_proportion_pvalues)
+```
+
+```{r}
+#Leg room service:
+legService_data <- df$`Leg room service`
+num_bootstrap <- 100
+
+p_values <- replicate(num_bootstrap, {
+  sample_data <- sample(legService_data, 5000, replace = TRUE)
+  shapiro_test(sample_data)
+})
+
+
+hist(legService_data, breaks = 30, main = "Histogram of Leg room service data", xlab = "Leg room service", col = "purple")
+qqnorm(legService_data); qqline(legService_data, col = "purple")
+
+legService_proportion_pvalues <- mean(p_values <= 0.05)
+paste("Proportion of p-values:", legService_proportion_pvalues)
+```
+
+```{r}
+#Baggage handling:
+baggageHandling_data <- df$`Baggage handling`
+num_bootstrap <- 100
+
+p_values <- replicate(num_bootstrap, {
+  sample_data <- sample(baggageHandling_data, 5000, replace = TRUE)
+  shapiro_test(sample_data)
+})
+
+
+hist(baggageHandling_data, breaks = 30, main = "Histogram of Baggage handling data", xlab = "Baggage handling", col = "yellow")
+qqnorm(baggageHandling_data); qqline(baggageHandling_data, col = "yellow")
+
+baggageHandling_proportion_pvalues <- mean(p_values <= 0.05)
+paste("Proportion of p-values:", baggageHandling_proportion_pvalues)
+```
+
+```{r}
+#Check-in service:
+checkinService_data <- df$`Checkin service`
+num_bootstrap <- 100
+
+p_values <- replicate(num_bootstrap, {
+  sample_data <- sample(checkinService_data, 5000, replace = TRUE)
+  shapiro_test(sample_data)
+})
+
+
+hist(checkinService_data, breaks = 30, main = "Histogram of Check-in service data", xlab = "Check-in service", col = "darkblue")
+qqnorm(checkinService_data); qqline(checkinService_data, col = "darkblue")
+
+checkinService_proportion_pvalues <- mean(p_values <= 0.05)
+paste("Proportion of p-values:", checkinService_proportion_pvalues)
+```
+
+```{r}
+#Cleanliness:
+cleanliness_data <- df$Cleanliness
+num_bootstrap <- 100
+
+p_values <- replicate(num_bootstrap, {
+  sample_data <- sample(cleanliness_data, 5000, replace = TRUE)
+  shapiro_test(sample_data)
+})
+
+
+hist(cleanliness_data, breaks = 30, main = "Histogram of Cleanliness data", xlab = "Cleanliness", col = "green")
+qqnorm(cleanliness_data); qqline(cleanliness_data, col = "green")
+
+cleanliness_proportion_pvalues <- mean(p_values <= 0.05)
+paste("Proportion of p-values:", cleanliness_proportion_pvalues)
+```
+
+```{r}
+#Online boarding:
+onlineBoarding_data <- df$`Online boarding`
+num_bootstrap <- 100
+
+p_values <- replicate(num_bootstrap, {
+  sample_data <- sample(onlineBoarding_data, 5000, replace = TRUE)
+  shapiro_test(sample_data)
+})
+
+
+hist(onlineBoarding_data, breaks = 30, main = "Histogram of Online boarding data", xlab = "Online boarding", col = "ivory")
+qqnorm(onlineBoarding_data); qqline(onlineBoarding_data, col = "ivory")
+
+onlineBoarding_proportion_pvalues <- mean(p_values <= 0.05)
+paste("Proportion of p-values:", onlineBoarding_proportion_pvalues)
+```
+
+```{r}
+#Departure delay in minutes:
+departureDelay_data <- df$`Departure Delay in Minutes`
+num_bootstrap <- 100
+
+p_values <- replicate(num_bootstrap, {
+  sample_data <- sample(departureDelay_data, 5000, replace = TRUE)
+  shapiro_test(sample_data)
+})
+
+
+hist(departureDelay_data, breaks = 30, main = "Histogram of Departure delay in minutes data", xlab = "Departure delay in minutes", col = "darkgray")
+qqnorm(departureDelay_data); qqline(departureDelay_data, col = "darkgray")
+
+departureDelay_proportion_pvalues <- mean(p_values <= 0.05)
+paste("Proportion of p-values:", departureDelay_proportion_pvalues)
+```
+
+```{r}
+#Arrival delay in minutes:
+arrivalDelay_data <- df$`Arrival Delay in Minutes`
+num_bootstrap <- 100
+
+p_values <- replicate(num_bootstrap, {
+  sample_data <- sample(arrivalDelay_data, 5000, replace = TRUE)
+  shapiro_test(sample_data)
+})
+
+
+hist(arrivalDelay_data, breaks = 30, main = "Histogram of Arrival delay in minutes data", xlab = "Arrival delay in minutes", col = "darkgray")
+qqnorm(arrivalDelay_data); qqline(arrivalDelay_data, col = "darkgray")
+
+arrivalDelay_proportion_pvalues <- mean(p_values <= 0.05)
+paste("Proportion of p-values:", arrivalDelay_proportion_pvalues)
+```
+
